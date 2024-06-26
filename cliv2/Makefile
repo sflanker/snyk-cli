@@ -52,6 +52,15 @@ else ifeq ($(_V1_OS), windows)
 	_EXE_POSTFIX = .exe
 endif
 
+# Unable to detect alpine, so we need to set it manually
+ifeq ($(ALPINE), 1)
+  LDFLAGS += -linkmode external -extldflags "-static"
+  V2_PLATFORM_STRING = alpine$(_SEPARATOR)$(GOARCH)
+  _V1_OS = alpine
+else
+	V2_PLATFORM_STRING = $(GOOS)$(_SEPARATOR)$(GOARCH)
+endif
+
 ifeq ($(_V1_ARCH), amd64)
 	_V1_ARCH =
 endif
@@ -69,7 +78,6 @@ endif
 # some globally assembled variables
 APPLICATION_NAME = snyk
 TEST_NAME = $(APPLICATION_NAME)$(_SEPARATOR)tests
-V2_PLATFORM_STRING = $(GOOS)$(_SEPARATOR)$(GOARCH)
 V2_EXECUTABLE_NAME = $(APPLICATION_NAME)$(_SEPARATOR)$(V2_PLATFORM_STRING)$(_EXE_POSTFIX)
 
 ifneq ($(USE_LEGACY_EXECUTABLE_NAME), $(_EMPTY))

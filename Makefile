@@ -123,6 +123,10 @@ $(BINARY_RELEASES_FOLDER_TS_CLI)/snyk-alpine: prepack | $(BINARY_RELEASES_FOLDER
 	$(PKG) -t node$(PKG_NODE_VERSION)-alpine-x64 -o $(BINARY_RELEASES_FOLDER_TS_CLI)/snyk-alpine
 	$(MAKE) $(BINARY_RELEASES_FOLDER_TS_CLI)/snyk-alpine.sha256
 
+$(BINARY_RELEASES_FOLDER_TS_CLI)/snyk-alpine-arm64: prepack | $(BINARY_RELEASES_FOLDER_TS_CLI)
+	$(PKG) -t node$(PKG_NODE_VERSION)-alpine-arm64 -o $(BINARY_RELEASES_FOLDER_TS_CLI)/snyk-alpine-arm64
+	$(MAKE) $(BINARY_RELEASES_FOLDER_TS_CLI)/snyk-alpine-arm64.sha256
+
 $(BINARY_RELEASES_FOLDER_TS_CLI)/snyk-linux: prepack | $(BINARY_RELEASES_FOLDER_TS_CLI)
 	$(PKG) -t node$(PKG_NODE_VERSION)-linux-x64 -o $(BINARY_RELEASES_FOLDER_TS_CLI)/snyk-linux
 	$(MAKE) $(BINARY_RELEASES_FOLDER_TS_CLI)/snyk-linux.sha256
@@ -228,6 +232,11 @@ build-fips: pre-build $(BINARY_OUTPUT_FOLDER)/fips/version
 .PHONY: build
 build: pre-build
 	@cd $(EXTENSIBLE_CLI_DIR); $(MAKE) build-full install bindir=$(WORKING_DIR)/$(BINARY_OUTPUT_FOLDER) USE_LEGACY_EXECUTABLE_NAME=1
+	@$(MAKE) clean-package-files
+
+.PHONY: build-alpine
+build-alpine: pre-build
+	@cd $(EXTENSIBLE_CLI_DIR); $(MAKE) build-full install bindir=$(WORKING_DIR)/$(BINARY_OUTPUT_FOLDER) USE_LEGACY_EXECUTABLE_NAME=1 ALPINE=1
 	@$(MAKE) clean-package-files
 
 .PHONY: sign
